@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ---- color tokens: "Sapling" botanical/editorial palette ---- */
+  --color-paper: #EEEFE6;
+  --color-paper-raised: #FFFFFF;
+  --color-paper-dim: #E4E5D9;
+  --color-ink: #16241C;
+  --color-ink-soft: #4C5C51;
+  --color-ink-faint: #8A9488;
+  --color-line: #D9D5C6;
+  --color-line-strong: #C6C2AF;
+
+  --color-gold: #C6852B;
+  --color-gold-soft: #E9C68A;
+  --color-gold-deep: #96631B;
+
+  --color-teal: #2F6F62;
+  --color-teal-soft: #CFE3DB;
+  --color-teal-deep: #1F4C42;
+
+  --color-coral: #B84A30;
+  --color-coral-soft: #F0D3C6;
+
+  /* Fixed "shell" chrome tokens for the app sidebar/topbar — deliberately do
+     NOT change between light/dark themes, so the sidebar keeps its identity
+     (and its white/5, white/10, border-white/10 overlays stay legible)
+     regardless of which theme the main content area is in. */
+  --color-shell: #16241C;
+  --color-shell-text: #EEEFE6;
+
+  --font-display: 'Fraunces', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #12160F;
+  --color-paper-raised: #1A2018;
+  --color-paper-dim: #212820;
+  --color-ink: #ECEBE2;
+  --color-ink-soft: #B7BEB0;
+  --color-ink-faint: #7D8577;
+  --color-line: #2E362B;
+  --color-line-strong: #414B3D;
+
+  --color-gold: #D79F45;
+  --color-gold-soft: #3A2E17;
+  --color-gold-deep: #F0C978;
+
+  --color-teal: #4B9C88;
+  --color-teal-soft: #1B332C;
+  --color-teal-deep: #7FCBB5;
+
+  --color-coral: #E08361;
+  --color-coral-soft: #3A241A;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+  html {
+    background: var(--color-paper);
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+  html:not([data-theme="dark"]) {
+    color-scheme: light;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-gold-soft);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 8px;
+    border: 2px solid var(--color-paper);
+  }
+}
+
+@layer components {
+  .paper-panel {
+    background: var(--color-paper-raised);
+    border: 1px solid var(--color-line);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .lift-hover {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+  .lift-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -18px rgba(22, 36, 28, 0.28);
+    border-color: var(--color-line-strong);
+  }
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: -60%;
+    width: 40%;
+    background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-shimmer:hover::after {
+    left: 130%;
+  }
+}
+
+/* ---- shared utility animations ---- */
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg) translateY(0); }
+  50% { transform: rotate(2deg) translateY(-3px); }
+}
+@keyframes drift {
+  0% { transform: translate(0,0) rotate(0deg); }
+  100% { transform: translate(30px,-24px) rotate(8deg); }
+}
+@keyframes grow-in {
+  from { transform: scaleY(0.3); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--color-paper-dim) 0%, #f6f6ec 50%, var(--color-paper-dim) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,23 @@
+# React
+sapling-frontend/node_modules/
+sapling-frontend/dist/
+sapling-frontend/.env
+
+# Spring Boot
+sapling-backend/target/
+
+# Environment / Secrets
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
